@@ -97,7 +97,6 @@ export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
   //     );
   //   }
   // }
-  debugger;
   if (!_.isEqual(workersWithType, workersWithTime)) {
     throw new Error(
       `Working time cannot be defined for workers without defined type. Workers without defined time are

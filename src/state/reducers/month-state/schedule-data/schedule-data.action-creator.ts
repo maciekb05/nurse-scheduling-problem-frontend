@@ -26,7 +26,6 @@ export class ScheduleDataActionCreator {
   ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      debugger;
       destinations.forEach((destination) => {
         const addNewSchedule = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
