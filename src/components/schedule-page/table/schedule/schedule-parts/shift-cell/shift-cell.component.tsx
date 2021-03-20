@@ -20,6 +20,7 @@ import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
+import * as _ from "lodash";
 
 const MODAL_CLOSE_MS = 444;
 function getShiftCode(value: string | number): ShiftCode {
@@ -72,9 +73,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     setIsComponentVisible(!isComponentVisible);
   }
 
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
-  );
+  const isEditMode = true;
+  useSelector((state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit);
+
   const shiftCode = getShiftCode(value);
   const keepOnClass = "keepOn" + keepOn + shiftCode;
   const hasNextClass = "hasNext" + hasNext;
@@ -209,6 +210,7 @@ export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) =
     prev.isSelected === next.isSelected &&
     prev.isBlocked === next.isBlocked &&
     prev.keepOn === next.keepOn &&
-    prev.hasNext === next.hasNext
+    prev.hasNext === next.hasNext &&
+    _.isEqual(prev.verboseDate, next.verboseDate)
   );
 });

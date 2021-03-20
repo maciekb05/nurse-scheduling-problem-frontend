@@ -7,11 +7,11 @@ import {
   ScheduleError,
 } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import { WorkerGroup } from "../../common-models/worker-info.model";
+import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { WorkerGroup, WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
-import { StringHelper } from "../../helpers/string.helper";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
