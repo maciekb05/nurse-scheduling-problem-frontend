@@ -24,6 +24,7 @@ export enum ScheduleActionType {
   ADD_NEW_SHIFT = "ADD_NEW_SHIFT",
   MODIFY_SHIFT = "MODIFY_SHIFT",
   DELETE_SHIFT = "DELETE_SHIFT",
+  SET_SCHEDULE_CORRUPTED = "SET_SCHEDULE_CORRUPTED",
 }
 
 export function createActionName(name: string, action: ScheduleActionType): string {
@@ -34,12 +35,13 @@ function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
   state: ScheduleDataModel
 ): void {
-  dispatch(ScheduleDataActionCreator.setScheduleFromScheduleDM(state, true));
+  dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(state));
 }
 
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "PERSISTENT_REVISION_UNDO",
   redoType: "PERSISTENT_REVISION_REDO",
+  clearHistoryType: "PERSISTENT_CLEAR_HISTORY",
   afterUndo: (dispatch, getState) => {
     const state = getState().actualState.persistentSchedule.present;
     updatePersistentSchedule(dispatch, state);
@@ -53,4 +55,5 @@ export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataMod
 export const TEMPORARY_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "TEMPORARY_REVISION_UNDO",
   redoType: "TEMPORARY_REVISION_REDO",
+  clearHistoryType: "TEMPORARY_CLEAR_HISTORY",
 };
