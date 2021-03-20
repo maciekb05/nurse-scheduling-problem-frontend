@@ -35,9 +35,6 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   private parseSections(rawSchedule: string[][][]): Sections {
-    let nurses;
-    let babysitters;
-
     const foundationInfoHeaders = Object.values(FoundationInfoHeaders);
 
     const foundationInfoRaw = rawSchedule.find((r) =>
@@ -60,34 +57,19 @@ export class ScheduleParser implements ScheduleProvider {
 
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
-    const nurseGroupNumber = 1;
-    const babysittersGroupNumber = 2;
-    rawSchedule.forEach((r) => {
-      if (r) {
-        if (!nurses) {
-          nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, nurseGroupNumber, r);
-        } else if (!babysitters) {
-          babysitters = new ShiftsInfoParser(WorkerType.OTHER, metadata, babysittersGroupNumber, r);
-        }
-      }
-    });
-
-    if (!nurses) {
-      nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, nurseGroupNumber);
-    }
-    if (!babysitters) {
-      babysitters = new ShiftsInfoParser(WorkerType.OTHER, metadata, babysittersGroupNumber);
-    }
+    const groups = rawSchedule.map(
+      (section, index) => new ShiftsInfoParser(metadata, index, section)
+    );
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
-      WorkerGroups: [nurses, babysitters],
+      WorkerGroups: groups,
       ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
-      WorkerGroups: [nurses, babysitters],
+      WorkerGroups: groups,
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };

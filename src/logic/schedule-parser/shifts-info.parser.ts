@@ -25,22 +25,13 @@ export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(
-    typeOfPersonel: WorkerType,
-    private metaData: MetaDataParser,
-    private groupNumber: number,
-    data?: string[][]
-  ) {
+  constructor(private metaData: MetaDataParser, private groupNumber: number, data?: string[][]) {
     super();
 
     if (data) {
       this.myPersonel(data).forEach((row) => {
         this._sectionRows[row.rowKey] = row;
       });
-    } else {
-      this.logLoadFileError(
-        "Nie znaleziono sekcji: " + WorkerTypeHelper.translate(typeOfPersonel, true)
-      );
     }
   }
 
